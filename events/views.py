@@ -48,14 +48,17 @@ def event_create(request):
         form = EventForm()
     return render(request, 'dashboard/event_form.html', {'form': form})
 
-
 def event_update(request, pk):
     event = get_object_or_404(Event, pk=pk)
-    form = EventForm(request.POST, instance=event)
-    if form.is_valid():
-        form.save()
-        return redirect('events:event_list')
+    if request.method == 'POST':
+        form = EventForm(request.POST, instance=event)
+        if form.is_valid():
+            form.save()
+            return redirect('events:event_list')
+    else:
+        form = EventForm(instance=event)
     return render(request, 'dashboard/event_form.html', {'form': form})
+
 
 def event_delete(request, pk):
     event = get_object_or_404(Event, pk=pk)
