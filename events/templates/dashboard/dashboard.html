@@ -1,0 +1,65 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<h2 class="text-2xl font-bold text-black mb-6">Organizer Dashboard</h2>
+<!--  Stats Grid -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+  <div class="bg-white p-4 shadow rounded cursor-pointer stat-box" data-filter="all">
+    <h3 class="text-gray-500 text-center">Total Participants</h3>
+    <p class="text-xl text-center font-bold">{{ total_participants }}</p>
+  </div>
+  <div class="bg-white p-4 shadow rounded cursor-pointer stat-box" data-filter="all">
+    <h3 class="text-gray-500 text-center">Total Events</h3>
+    <p class="text-xl font-bold text-center">{{ total_events }}</p>
+  </div>
+  <div class="bg-white p-4 shadow rounded cursor-pointer stat-box" data-filter="upcoming">
+    <h3 class="text-gray-500 text-center">Upcoming Events</h3>
+    <p class="text-xl font-bold text-center">{{ upcoming_count }}</p>
+  </div>
+  <div class="bg-white p-4 shadow rounded cursor-pointer stat-box" data-filter="past">
+    <h3 class="text-gray-400 text-center">Past Events</h3>
+    <p class="text-xl font-bold text-center">{{ past_count }}</p>
+  </div>
+</div>
+
+<!--  Today's Events -->
+<h3 class="text-xl font-semibold mb-2">Today's Events</h3>
+<ul class="space-y-2">
+  {% for event in todays_events %}
+    <li class="bg-white p-3 rounded shadow">
+      <div class="flex justify-between items-center">
+        <div>{{ event.name }} - {{ event.time }}</div>
+        <div class="text-sm px-2 py-1 rounded">
+          Total Participants: {{ event.participant_set.count }}
+        </div>
+      </div>
+    </li>
+  {% empty %}
+    <li class="text-gray-500">No events today.</li>
+  {% endfor %}
+</ul>
+{% endblock %}
+
+<!--  JavaScript for dynamic filtering -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".stat-box").forEach(function (box) {
+      box.addEventListener("click", function () {
+        let filter = box.dataset.filter;
+        let rows = document.querySelectorAll(".event-row");
+        rows.forEach((row) => {
+          let date = row.dataset.date;
+          let today = new Date().toISOString().split("T")[0];
+
+          if (filter === "all") {
+            row.style.display = "";
+          } else if (filter === "upcoming" && date > today) {
+            row.style.display = "";
+          } else if (filter === "past" && date < today) {
+            row.style.display = "";
+          } else {
+            row.style.display = "none";
+          }
+        });
+      });
+    });
+  });
+</script>
