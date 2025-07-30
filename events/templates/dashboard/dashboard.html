@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="p-6 min-h-screen bg-gray-100">
+
+  <h2 class="text-3xl font-bold text-gray-800 mb-8">Organizer Dashboard</h2>
+
+  <!-- Stat Boxes Grid -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+
+    <!-- Card 1: Total Participants (সঠিক করা হয়েছে) -->
+    <div class="bg-white p-6 rounded-lg shadow-md">
+      <h3 class="text-sm font-medium text-gray-500">Total Participants</h3>
+      <p class="text-3xl font-bold text-gray-900 mt-2">{{ counts.total_participants }}</p>
+    </div>
+
+    <!-- Card 2: Total Events-->
+    <div hx-get="{% url 'events:organizer_dashboard' %}?type=total" 
+         hx-target="#full-event-section" 
+         class="bg-white p-6 rounded-lg shadow-md cursor-pointer hover:bg-gray-50 transition-colors">
+      <h3 class="text-sm font-medium text-gray-500">Total Events</h3>
+      <p class="text-3xl font-bold text-gray-900 mt-2">{{ counts.total_events }}</p>
+    </div>
+
+    <!-- Card 3: Upcoming Events-->
+    <div hx-get="{% url 'events:organizer_dashboard' %}?type=upcoming" 
+         hx-target="#full-event-section"
+         class="bg-white p-6 rounded-lg shadow-md cursor-pointer hover:bg-gray-50 transition-colors">
+      <h3 class="text-sm font-medium text-gray-500">Upcoming Events</h3>
+      <p class="text-3xl font-bold text-gray-900 mt-2">{{ counts.upcoming_events }}</p>
+    </div>
+
+    <!-- Card 4: Past Events-->
+    <div hx-get="{% url 'events:organizer_dashboard' %}?type=past"
+         hx-target="#full-event-section"
+         class="bg-white p-6 rounded-lg shadow-md cursor-pointer hover:bg-gray-50 transition-colors">
+      <h3 class="text-sm font-medium text-gray-500">Past Events</h3>
+      <p class="text-3xl font-bold text-gray-900 mt-2">{{ counts.past_events }}</p>
+    </div>
+
+  </div>
+
+  <!-- Events List Container -->
+  <div id="full-event-section">
+      <h3 class="text-xl font-semibold mb-4 text-gray-700">
+          Events (Showing: <span class="capitalize">{{ current_filter }}</span>)
+      </h3>
+      <div id="event-list-container">
+        {% include 'dashboard/partials/event_list_partial.html' with events=events %}
+      </div>
+  </div>
+
+</div>
+{% endblock %}

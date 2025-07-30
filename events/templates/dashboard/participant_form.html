@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}
+
+  {% if form.instance.pk %}
+    Update Participant
+
+  {% else %}
+    Register Participant
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto my-10">
+    
+    <!-- Success Message -->
+    {% if messages %}
+      {% for message in messages %}
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg relative shadow-sm mb-6" role="alert">
+          <strong class="font-bold">Success!</strong>
+          <span class="block sm:inline">{{ message }}</span>
+        </div>
+      {% endfor %}
+    {% endif %}
+
+    <div class="bg-white p-8 rounded-lg shadow-md">
+      <h2 class="text-2xl font-bold mb-6 text-gray-800">
+
+        {% if form.instance.pk %}Update Participant{% else %}Register as a Participant{% endif %}
+      </h2>
+      
+      <form method="POST" class="space-y-6">
+          {% csrf_token %}
+          
+          <!-- Name Field -->
+          <div>
+            <label for="{{ form.name.id_for_label }}" class="block text-sm font-medium text-gray-700">{{ form.name.label }}</label>
+            {{ form.name }}
+            {% if form.name.errors %}<p class="mt-1 text-sm text-red-600">{{ form.name.errors|first }}</p>{% endif %}
+          </div>
+          
+          <!-- Email Field -->
+          <div>
+            <label for="{{ form.email.id_for_label }}" class="block text-sm font-medium text-gray-700">{{ form.email.label }}</label>
+            {{ form.email }}
+            {% if form.email.errors %}<p class="mt-1 text-sm text-red-600">{{ form.email.errors|first }}</p>{% endif %}
+          </div>
+          
+          <!-- Events Checkbox Field -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700">{{ form.events.label }}</label>
+            <div class="mt-2 p-4 border border-gray-200 rounded-md max-h-48 overflow-y-auto space-y-2">
+              {% for checkbox in form.events %}
+                <div class="flex items-center">
+                  {{ checkbox.tag }}
+                  <label for="{{ checkbox.id_for_label }}" class="ml-3 block text-sm text-gray-900">
+                    {{ checkbox.choice_label }}
+                  </label>
+                </div>
+              {% endfor %}
+            </div>
+            {% if form.events.errors %}<p class="mt-1 text-sm text-red-600">{{ form.events.errors|first }}</p>{% endif %}
+          </div>
+          
+          <!-- Submit Button-->
+          <div>
+            <button type="submit" class="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+
+              {% if form.instance.pk %}Update Participant{% else %}Register{% endif %}
+            </button>
+          </div>
+      </form>
+    </div>
+</div>
+{% endblock %}

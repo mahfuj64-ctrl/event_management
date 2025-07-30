@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    
+    <!-- Responsive Viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>{% block title %}Event Management{% endblock %}</title>
+    
+    <!--  Tailwind CSS-->
+    <link href="{% static 'css/output.css' %}" rel="stylesheet"/>
+    
+    <!-- HTMX Script -->
+    <script src="https://unpkg.com/htmx.org@1.9.10" defer></script>
+
+</head>
+<body class="bg-gray-100 font-sans">
+    
+    <!-- Navigation Bar -->
+    <nav class="bg-blue-600 text-white shadow-md">
+        <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <a href="{% url 'events:organizer_dashboard' %}" class="text-xl font-bold">Event Management</a>
+            <div class="space-x-4 flex items-center">
+                <a href="{% url 'events:event_list' %}" class="hover:text-blue-200 transition-colors">Events</a>
+                <a href="{% url 'events:participant_list' %}" class="hover:text-blue-200 transition-colors">Participants</a>
+                <a href="{% url 'events:event_create' %}" class="hover:text-blue-200 transition-colors">Add Event</a>
+                <a href="{% url 'events:organizer_dashboard' %}" class="hover:text-blue-200 transition-colors">Dashboard</a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Main Content Area -->
+    <main class="container mx-auto p-6">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+</body>
+</html>
